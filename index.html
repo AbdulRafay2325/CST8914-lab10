@@ -1,58 +1,41 @@
-document.addEventListener("DOMContentLoaded", function () {
-    const menuButton = document.getElementById("menubutton1");
-    const menu = document.getElementById("menu1");
-    const menuItems = Array.from(menu.querySelectorAll("[role='menuitem']"));
-    let focusedIndex = 0;
+<!doctype html>
+<html lang="en">
 
-    // Initially set the first item as focusable
-    menuItems.forEach((item, index) => {
-        item.setAttribute("tabindex", index === 0 ? "0" : "-1");
-        item.setAttribute("aria-selected", "false");
-    });
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <title>Focus</title>
+  <link href="CSS.css" rel="stylesheet" type="text/css">
+  <script src="JS.js"></script>
+</head>
 
-    menuButton.addEventListener("click", function () {
-        const isExpanded = menuButton.getAttribute("aria-expanded") === "true";
-        menuButton.setAttribute("aria-expanded", !isExpanded);
-        menu.classList.toggle("show");
-        if (!isExpanded) {
-            menuItems[focusedIndex].focus();
-        }
-    });
+<body>
+  <main>
+    <h1>Managing Keyboard Focus</h1>
+    <p>Instructions: Use 'up & down arrow keys' to navigate between menu items (need fix!), 'enter' to activate menu item, 'escape'
+      key to close menu.</p>
+    <h2>What to do:</h2>
+    <p>Apply roving index technique to programmatically manage the keyboard focus on the menu (on keys arrow up and down).</p>
+    <div class="menu-button-actions">
+      <p>
+        <label>Pizza Choice:<br> <input class="action" id="action_output" type="text" value=""></label>
+      </p>
+      <button type="button" id="menubutton1" aria-haspopup="true" aria-controls="menu1">
+        Pizza Menu
+        <svg xmlns="http://www.w3.org/2000/svg" class="down" width="12" height="9" viewBox="0 0 12 9">
+          <polygon points="1 0, 11 0, 6 8"></polygon>
+        </svg>
+      </button>
 
-    menu.addEventListener("keydown", function (event) {
-        switch (event.key) {
-            case "ArrowDown":
-                event.preventDefault();
-                focusedIndex = (focusedIndex + 1) % menuItems.length;
-                updateFocus();
-                break;
-            case "ArrowUp":
-                event.preventDefault();
-                focusedIndex = (focusedIndex - 1 + menuItems.length) % menuItems.length;
-                updateFocus();
-                break;
-            case "Enter":
-                event.preventDefault();
-                document.getElementById("action_output").value = menuItems[focusedIndex].textContent;
-                closeMenu();
-                break;
-            case "Escape":
-                closeMenu();
-                break;
-        }
-    });
+      <ul id="menu1" role="menu" aria-labelledby="menubutton1">
+        <li role="menuitem">Pizza 1</li>
+        <li role="menuitem">Pizza 2</li>
+        <li role="menuitem">Pizza 3</li>
+        <li role="menuitem">Pizza 4</li>
+      </ul>
+    </div>
 
-    function updateFocus() {
-        menuItems.forEach((item, index) => {
-            item.setAttribute("tabindex", index === focusedIndex ? "0" : "-1");
-            item.setAttribute("aria-selected", index === focusedIndex ? "true" : "false");
-        });
-        menuItems[focusedIndex].focus();
-    }
+  </main>
+</body>
 
-    function closeMenu() {
-        menu.classList.remove("show");
-        menuButton.setAttribute("aria-expanded", "false");
-        menuButton.focus();
-    }
-});
+</html>
